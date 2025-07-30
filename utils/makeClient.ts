@@ -1,6 +1,6 @@
-import fetch from "node-fetch";
-
 export const runMakeScenario = async (scenarioId: string, parameters: object) => {
+  const { default: fetch } = await import('node-fetch');
+
   const baseUrl = `https://${process.env.MAKE_ZONE}/api`;
 
   const response = await fetch(`${baseUrl}/v2/scenarios/${scenarioId}/run`, {
