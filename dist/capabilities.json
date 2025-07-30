@@ -1,0 +1,166 @@
+[
+    {
+        "id": "add_task",
+        "title": "Créer une tâche",
+        "description": "Ajoute une tâche dans Notion",
+        "parameters": {
+            "title": "string",
+            "date": "string?",
+            "time": "string?",
+            "context": "string?",
+            "project": "string?"
+        }
+    },
+    {
+        "id": "get_today_tasks",
+        "title": "Afficher les tâches du jour",
+        "description": "Liste les tâches prévues aujourd’hui"
+    },
+    {
+        "id": "mark_task_done",
+        "title": "Marquer une tâche comme faite",
+        "description": "Met à jour le statut d’une tâche"
+    },
+    {
+        "id": "update_task",
+        "title": "Modifier une tâche",
+        "description": "Permet de modifier le nom, la date ou le projet d’une tâche",
+        "parameters": {
+            "id": "string",
+            "title": "string?",
+            "date": "string?",
+            "time": "string?",
+            "project": "string?"
+        }
+    },
+    {
+        "id": "delete_task",
+        "title": "Supprimer une tâche",
+        "description": "Supprime une tâche de Notion",
+        "parameters": {
+            "id": "string"
+        }
+    },
+    {
+        "id": "add_project_with_tasks",
+        "title": "Créer un projet avec tâches",
+        "description": "Crée un projet et le découpe en tâches concrètes",
+        "parameters": {
+            "title": "string",
+            "goal": "string?",
+            "deadline": "string?",
+            "context": "string?"
+        }
+    },
+    {
+        "id": "update_project",
+        "title": "Modifier un projet",
+        "description": "Change le titre, le statut ou la deadline d’un projet",
+        "parameters": {
+            "id": "string",
+            "title": "string?",
+            "deadline": "string?",
+            "status": "string?"
+        }
+    },
+    {
+        "id": "get_active_projects",
+        "title": "Lister les projets actifs",
+        "description": "Affiche les projets non terminés"
+    },
+    {
+        "id": "complete_project",
+        "title": "Terminer un projet",
+        "description": "Change le statut d’un projet à terminé",
+        "parameters": {
+            "id": "string"
+        }
+    },
+    {
+        "id": "delete_project",
+        "title": "Supprimer un projet",
+        "description": "Supprime un projet et ses tâches associées",
+        "parameters": {
+            "id": "string"
+        }
+    },
+    {
+        "id": "get_today_planning",
+        "title": "Afficher le planning du jour",
+        "description": "Affiche toutes les tâches et événements prévus aujourd’hui"
+    },
+    {
+        "id": "task_to_planning_auto",
+        "title": "Ajouter automatiquement une tâche au planning",
+        "description": "Ajoute une tâche prévue aujourd’hui dans le planning journalier"
+    },
+    {
+        "id": "update_planning_item",
+        "title": "Modifier un élément du planning",
+        "description": "Change l’heure, le lieu ou l’ordre d’un item",
+        "parameters": {
+            "id": "string",
+            "time": "string?",
+            "location": "string?"
+        }
+    },
+    {
+        "id": "delete_planning_item",
+        "title": "Supprimer un élément du planning",
+        "description": "Supprime une tâche ou un événement du planning",
+        "parameters": {
+            "id": "string"
+        }
+    },
+    {
+        "id": "add_feedback",
+        "title": "Ajouter un feedback journalier",
+        "description": "Enregistre un ressenti, bilan ou note personnelle",
+        "parameters": {
+            "text": "string",
+            "date": "string?"
+        }
+    },
+    {
+        "id": "get_weekly_feedback",
+        "title": "Afficher les feedbacks de la semaine",
+        "description": "Liste les feedbacks des 7 derniers jours"
+    },
+    {
+        "id": "update_feedback",
+        "title": "Modifier un feedback",
+        "description": "Permet de corriger un feedback existant",
+        "parameters": {
+            "id": "string",
+            "text": "string"
+        }
+    },
+    {
+        "id": "delete_feedback",
+        "title": "Supprimer un feedback",
+        "description": "Efface un retour obsolète ou erroné",
+        "parameters": {
+            "id": "string"
+        }
+    },
+    {
+        "id": "calendar_availability",
+        "title": "Vérifier les disponibilités",
+        "description": "Lis Google Calendar et propose des créneaux libres",
+        "parameters": {
+            "duration": "string"
+        }
+    },
+    {
+        "id": "add_to_calendar",
+        "title": "Créer un événement dans Google Calendar",
+        "description": "Ajoute un événement avec date, heure, titre et participants",
+        "parameters": {
+            "title": "string",
+            "date": "string",
+            "time": "string",
+            "duration": "string?",
+            "participants": "array?"
+        }
+    }
+]
