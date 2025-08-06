@@ -1,10 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const capabilities_1 = require("./controllers/capabilities");
 const run_1 = require("./controllers/run");
 const router = (0, express_1.Router)();
-router.get("/capabilities", capabilities_1.capabilitiesHandler);
+router.get("/capabilities", (req, res) => {
+    res.json({
+        capabilities: [
+            {
+                id: "ping",
+                title: "Tester la connexion",
+                description: "Répond simplement pong",
+                parameters: {
+                    name: "string"
+                }
+            }
+        ]
+    });
+});
 router.post("/run", run_1.runHandler);
-router.post("/execute", run_1.runHandler);
 exports.default = router;
