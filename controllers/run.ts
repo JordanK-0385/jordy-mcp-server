@@ -23,6 +23,14 @@ export const runHandler = async (req: Request, res: Response) => {
 
   // ✅ Cas Jordy avancé (domain + action + data)
   if (domain && action && data) {
+    // === LOGGING DU threadID SI PRÉSENT ===
+    const threadID = data.threadID || data.threadId || data.thread_id;
+    if (threadID) {
+      console.log("🔗 Thread ID détecté pour ce projet :", threadID);
+    } else {
+      console.log("⚠️ Aucun Thread ID transmis dans cette requête.");
+    }
+
     const actionKey = `${domain}:${action}`;
     const scenarioId = scenarioMap[actionKey];
 
