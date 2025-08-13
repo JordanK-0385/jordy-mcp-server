@@ -1,25 +1,23 @@
 import { Router, Request, Response } from "express";
 import { runHandler } from "./controllers/run";
-import capabilities from "./capabilities.json"; // utilise ton fichier
+import capabilities from "./capabilities.json";
 
 const router = Router();
 
-// Healthcheck simple
+// Healthcheck
 router.get("/", (_req: Request, res: Response) => {
-  res.status(200).json({ ok: true });
+  res.status(200).json({ ok: true }); // pas de "status"
 });
 
-// Désactive toute tentative de POST sur "/"
-router.post("/", (_req: Request, res: Response) => {
-  res.status(405).json({ error: "Use POST /run with JSON-RPC 2.0" });
-});
+// ⚠️ IMPORTANT : Make poste sur "/" lors de la vérification → on délègue au JSON-RPC
+router.post("/", runHandler);
 
-// Capabilities complètes depuis capabilities.json
+// Capabilities
 router.get("/capabilities", (_req: Request, res: Response) => {
   res.json({ capabilities });
 });
 
-// Entrée JSON-RPC 2.0 unique
+// Entrée JSON-RPC officielle
 router.post("/run", runHandler);
 
 export default router;
