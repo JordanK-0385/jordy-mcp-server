@@ -4,37 +4,48 @@ exports.runHandler = void 0;
 const makeClient_1 = require("../utils/makeClient");
 const scenarioMap_1 = require("../config/scenarioMap");
 const runHandler = async (req, res) => {
-    const { capabilityId, parameters, domain, action, data } = req.body;
-    console.log("📨 Reçu de Make :", JSON.stringify(req.body, null, 2));
-    // ✅ Cas test de connexion (aucune donnée)
-    const isEmptyRequest = !capabilityId && !domain && !action && !data;
-    if (isEmptyRequest) {
-        return res.status(200).json({
-            content: "✅ MCP connecté avec succès à Jordy (test Make)",
+    const { jsonrpc, id, method, params } = req.body ?? {};
+    // Validation JSON-RPC minimale
+    if (jsonrpc !== "2.0" || typeof id === "undefined" || !method) {
+        return res.status(400).json({
+            jsonrpc: "2.0",
+            id: typeof id === "undefined" ? null : id,
+            error: { code: -32600, message: "Invalid Request: JSON-RPC 2.0 required" }
         });
     }
-    // ✅ Cas Make natif (capabilityId + parameters)
-    if (capabilityId === "ping") {
-        const name = parameters?.name || "anonyme";
-        return res.json({ result: `pong 🏓 (hello ${name})` });
+    try {
+        // Test simple
+        if (method === "ping") {
+            const name = params?.name ?? "anonyme";
+            return res.json({
+                jsonrpc: "2.0",
+                id,
+                result: { pong: `pong 🏓 (hello ${name})` }
+            });
+        }
+        // Mapping capabilities -> scenarios Make (facultatif si tu gères tout en local)
+        const scenarioId = scenarioMap_1.scenarioMap[method];
+        if (scenarioId) {
+            const result = await (0, makeClient_1.runMakeScenario)(scenarioId, params ?? {});
+            return res.json({ jsonrpc: "2.0", id, result });
+        }
+        // Exemple local pour add_task si tu ne veux pas appeler Make tout de suite
+        if (method === "add_task") {
+            return res.json({ jsonrpc: "2.0", id, result: { message: "Tâche créée", params } });
+        }
+        return res.status(404).json({
+            jsonrpc: "2.0",
+            id,
+            error: { code: -32601, message: `Method not found: ${method}` }
+        });
     }
-    // ✅ Cas Jordy avancé (domain + action + data)
-    if (domain && action && data) {
-        const actionKey = `${domain}:${action}`;
-        const scenarioId = scenarioMap_1.scenarioMap[actionKey];
-        if (!scenarioId) {
-            return res.status(404).json({ error: `Action non reconnue : ${actionKey}` });
-        }
-        try {
-            const result = await (0, makeClient_1.runMakeScenario)(scenarioId, data);
-            return res.json(result);
-        }
-        catch (error) {
-            console.error("❌ Erreur lors de l’appel Make :", error.message);
-            return res.status(500).json({ error: "Erreur interne MCP" });
-        }
+    catch (e) {
+        const msg = e instanceof Error ? e.message : String(e);
+        return res.status(500).json({
+            jsonrpc: "2.0",
+            id,
+            error: { code: -32000, message: "Internal error: " + msg }
+        });
     }
-    // ❌ Aucun format reconnu
-    return res.status(400).json({ error: "Requête invalide : format non reconnu" });
 };
 exports.runHandler = runHandler;

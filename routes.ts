@@ -1,33 +1,25 @@
-import { Router } from "express";
+import { Router, Request, Response } from "express";
 import { runHandler } from "./controllers/run";
+import capabilities from "./capabilities.json"; // utilise ton fichier
 
 const router = Router();
 
-// Route racine GET (pour test Make)
-router.get("/", (_req, res) => {
-  res.status(200).json({ status: "MCP OK" });
+// Healthcheck simple
+router.get("/", (_req: Request, res: Response) => {
+  res.status(200).json({ ok: true });
 });
 
-// Route racine POST (pour test Make)
-router.post("/", (_req, res) => {
-  res.status(200).json({ status: "MCP OK" });
+// Désactive toute tentative de POST sur "/"
+router.post("/", (_req: Request, res: Response) => {
+  res.status(405).json({ error: "Use POST /run with JSON-RPC 2.0" });
 });
 
-router.get("/capabilities", (_req, res) => {
-  res.json({
-    capabilities: [
-      {
-        id: "ping",
-        title: "Tester la connexion",
-        description: "Répond simplement pong",
-        parameters: {
-          name: "string"
-        }
-      }
-    ]
-  });
+// Capabilities complètes depuis capabilities.json
+router.get("/capabilities", (_req: Request, res: Response) => {
+  res.json({ capabilities });
 });
 
+// Entrée JSON-RPC 2.0 unique
 router.post("/run", runHandler);
 
 export default router;
